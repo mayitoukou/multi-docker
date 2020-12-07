@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t sigmund/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run sigmund/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t sigmund/multi-client ./client
+    - docker build -t sigmund/multi-nginx ./nginx
+    - docker build -t sigmund/multi-server ./server
+    - docker build -t sigmund/multi-worker ./worker
+    # Log in the docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    #Take those images and push them to docker hub
+    - docker push sigmund/multi-client
+    - docker push sigmund/multi-nginx
+    - docker push sigmund/multi-server
+    - docker push sigmund/multi-worker
