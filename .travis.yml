@@ -3,20 +3,21 @@ services:
   - docker
 
 before_install:
-  - docker build -t mayitoukou/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t sigmunddocker/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run mayitoukou/react-test npm test -- --coverage
+  - docker run sigmunddocker/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t mayitoukou/multi-client ./client
-  - docker build -t mayitoukou/multi-nginx ./nginx
-  - docker build -t mayitoukou/multi-server ./server
-  - docker build -t mayitoukou/multi-worker ./worker
+  - docker build -t sigmunddocker/multi-client ./client
+  - docker build -t sigmunddocker/multi-nginx ./nginx
+  - docker build -t sigmunddocker/multi-server ./server
+  - docker build -t sigmunddocker/multi-worker ./worker
 # Log in the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 #Take those images and push them to docker hub
-  - docker push mayitoukou/multi-client
-  - docker push mayitoukou/multi-nginx
-  - docker push mayitoukou/multi-server
-  - docker push mayitoukou/multi-worker
+  - docker push sigmunddocker/multi-client
+  - docker push sigmunddocker/multi-nginx
+  - docker push sigmunddocker/multi-server
+  - docker push sigmunddocker/multi-worker
+  
